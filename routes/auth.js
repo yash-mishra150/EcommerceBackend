@@ -5,8 +5,8 @@ const router = express.Router();
 const User = require('../schema/auth/userSchema');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../util/jwtToken');
-const apiKeyMiddleware = require('../middleware/apiKey');
-const limiter = require('../middleware/rateLimiter');
+const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
+const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 const { verifyToken } = require('../util/jwtToken');
 
 router.use(apiKeyMiddleware);
