@@ -20,7 +20,7 @@ router.post('/send-otp', async (req, res) => {
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
-        const otpExpiry = Date.now() + 5 * 60 * 1000;
+        const otpExpiry = Date.now() + 2 * 60 * 1000;
 
 
         await OtpVerification.create({
@@ -52,7 +52,7 @@ router.post('/send-otp', async (req, res) => {
         
                 Your OTP: ${otp}
         
-                This OTP is valid for the next [X minutes] and can be used only once. If you did not request this OTP, please ignore this email.
+                This OTP is valid for the next [2 minutes] and can be used only once. If you did not request this OTP, please ignore this email.
         
                 If you have any questions or need assistance, feel free to reach out to our customer support.
         
