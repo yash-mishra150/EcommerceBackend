@@ -1,5 +1,3 @@
-// routes/user.js
-
 const express = require('express');
 const router = express.Router();
 const User = require('../schema/auth/userSchema');
@@ -17,16 +15,14 @@ router.post('/register', async (req, res) => {
   const { name, email, password, phone } = req.body;
 
   try {
-    // Check if user already exists
     let existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ msg: 'User already exists' });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
+
     let user = new User({
       name,
       email,

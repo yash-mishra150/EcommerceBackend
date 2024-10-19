@@ -17,16 +17,20 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    required: true, 
+    required: true,
   },
   profileImage: {
-    url: { type: String },           
-    public_id: { type: String },      
+    url: { type: String },
+    public_id: { type: String },
   },
   date: {
     type: Date,
     default: Date.now,
   },
+  isVerifed: {
+    type: Boolean,
+    default: false
+  }
 });
 
 // Export the User model

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 
 const auth = require('./routes/auth');
 const UPP = require('./routes/photoUpdate');
+const emailVerify = require('./routes/EmailOTPVerify');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -22,8 +23,8 @@ app.use(cors({ origin: '*' }));
 
 
 app.use('/api/auth', auth);
-app.use('/api/upload', UPP)
-
+app.use('/api/upload', UPP);
+app.use('/api/eVerify',emailVerify);
 app.get('/', (req, res) => {
   res.send('Welcome to my Node.js backend!');
 });
