@@ -12,6 +12,8 @@ const UPP = require('./routes/photoUpdate');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set('trust proxy', true); // Or use a specific number if you know how many proxies are in front
+
 
 app.use(bodyParser.json()); 
 
