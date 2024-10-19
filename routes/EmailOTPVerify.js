@@ -2,7 +2,7 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const User = require('../schema/auth/userSchema');
-const OtpVerification = require('../schema/auth/otpVerification'); 
+const OtpVerification = require('../schema/auth/otpVerification');
 require('dotenv').config();
 const router = express.Router();
 
@@ -17,10 +17,10 @@ router.post('/send-otp', async (req, res) => {
 
         await OtpVerification.deleteMany({ email: email, otpExpiry: { $lt: Date.now() } });
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
-        const otpHash = crypto.createHash('sha256').update(otp).digest('hex'); 
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
-        const otpExpiry = Date.now() + 5 * 60 * 1000; 
+        const otpExpiry = Date.now() + 5 * 60 * 1000;
 
 
         await OtpVerification.create({
@@ -28,7 +28,7 @@ router.post('/send-otp', async (req, res) => {
             otpHash: otpHash,
             otpExpiry: otpExpiry
         });
-        
+
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -42,9 +42,29 @@ router.post('/send-otp', async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Your OTP for Email Verification',
-            text: `Your OTP is: ${otp}`
+            subject: 'Your OTP for Food Delivery Verification',
+            text: `
+                Dear Customer,
+        
+                Thank you for choosing GrabEats!
+        
+                To complete your registration and ensure the security of your account, please enter the One-Time Password (OTP) below:
+        
+                Your OTP: ${otp}
+        
+                This OTP is valid for the next [X minutes] and can be used only once. If you did not request this OTP, please ignore this email.
+        
+                If you have any questions or need assistance, feel free to reach out to our customer support.
+        
+                Thank you for being a valued customer!
+        
+                Best regards,
+                Yash Mishra,
+                Founder
+                GrabEats
+            `
         };
+
 
 
         transporter.sendMail(mailOptions, (error) => {
@@ -63,7 +83,7 @@ router.post('/verify-otp', async (req, res) => {
     const { email, otp } = req.body;
 
     try {
-        const otpHash = crypto.createHash('sha256').update(otp).digest('hex'); 
+        const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
         const otpRecord = await OtpVerification.findOne({ email: email });
 
 
@@ -73,7 +93,7 @@ router.post('/verify-otp', async (req, res) => {
 
 
         if (otpRecord.otpExpiry < Date.now()) {
-            await OtpVerification.deleteOne({ email: email }); 
+            await OtpVerification.deleteOne({ email: email });
             return res.status(400).json({ message: 'OTP expired. Please request a new OTP.' });
         }
 
@@ -89,13 +109,13 @@ router.post('/verify-otp', async (req, res) => {
         }
 
 
-        await OtpVerification.deleteOne({ email: email }); 
+        await OtpVerification.deleteOne({ email: email });
 
 
         await User.findOneAndUpdate(
-            { email: email }, 
-            { isVerifed: true }, 
-            { new: true } 
+            { email: email },
+            { isVerifed: true },
+            { new: true }
         );
 
         return res.status(200).json({ message: 'OTP verified successfully, user verified.' });
