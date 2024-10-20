@@ -15,16 +15,16 @@ router.use(removeWhitespace);
 
 // Registration route with validations
 router.post('/register', [
-  check('name').notEmpty().withMessage('Name is required.'),
-  check('email').isEmail().withMessage('Please include a valid email.'),
+  check('name').trim().notEmpty().withMessage('Name is required.'),
+  check('email').trim().isEmail().withMessage('Please include a valid email.'),
   check('phone')
-    .isMobilePhone('any')
-    .withMessage('Please provide a valid phone number.'),
+    .trim()
+    .isMobilePhone('any').withMessage('Please provide a valid phone number.'),
   check('phone')
-    .isLength({ min: 10, max: 10 })
-    .withMessage('Phone number must be 10 digits long.'),
+    .isLength({ min: 10, max: 10 }).withMessage('Phone number must be 10 digits long.'),
   check('password')
-    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.')
+    .trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.')
+  
 ], async (req, res) => {
   console.log('Received request body:', req.body);
   const errors = validationResult(req);
