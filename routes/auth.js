@@ -17,9 +17,6 @@ router.post(
   [
     check('name').notEmpty().withMessage('Name is required.'),
     check('email').isEmail().withMessage('Please include a valid email.'),
-    check('password')
-      .isLength({ min: 6 })
-      .withMessage('Password must be at least 6 characters long.'),
     check('phone')
       .isMobilePhone('any', { strict: true })
       .withMessage('Please provide a valid phone number.'),
