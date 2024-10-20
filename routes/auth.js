@@ -28,12 +28,13 @@ router.post(
       .withMessage('Phone number must be 10 digits Long.'),
   ],
   async (req, res) => {
-    const { name, email, password, phone } = req.body;
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
+    const { name, email, password, phone } = req.body;
 
 
     try {
