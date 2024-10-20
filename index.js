@@ -12,6 +12,11 @@ const UPP = require('./routes/photoUpdate');
 const emailVerify = require('./routes/EmailOTPVerify');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const EventEmitter = require('events');
+const bus = new EventEmitter();
+
+// Increase the maximum number of listeners
+bus.setMaxListeners(20);
 
 // app.set('trust proxy', 1); // Or use a specific number if you know how many proxies are in front
 
@@ -19,7 +24,11 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json()); 
 
 
-app.use(cors({ origin: '*' }));
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Include credentials if needed
+}));
 
 
 app.use('/api/auth', auth);
