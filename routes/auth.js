@@ -7,10 +7,11 @@ const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
 const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 const { verifyToken } = require('../util/jwtToken');
 const { check, validationResult } = require('express-validator');
+const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
 
 router.use(apiKeyMiddleware);
 router.use(limiter);
-
+router.use(removeWhitespace);
 // Registration route with validations
 router.post(
   '/register',
