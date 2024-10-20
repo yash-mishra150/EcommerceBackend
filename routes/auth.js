@@ -15,44 +15,52 @@ router.post('/register', async (req, res) => {
   const { name, email, password, phone } = req.body;
 
   try {
-    let existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ msg: 'User already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+      let existingUser = await User.findOne({ email });
+      if (existingUser) {
+          return res.status(400).json({ msg: 'User already exists' });
+      }
 
 
-    let user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-    });
-
-    await user.save();
+      const hashedPassword = await bcrypt.hash(password, 10);
 
 
-    const token = generateToken(user._id);
+      let user = new User({
+          name,
+          email,
+          password: hashedPassword,
+          phone,
+          profileImage: {
+              url: '',
+              public_id: '',
+          },
+      });
 
-    res.status(201).json({
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        profileImage: {
-          url: user.profileImage.url,
-          public_id: user.profileImage.public_id,
-        },
-      },
-      token,
-    });
+
+      await user.save();
+
+
+      const token = generateToken(user.id);
+
+
+      res.status(201).json({
+          user: {
+              id: user.id, 
+              name: user.name,
+              email: user.email,
+              phone: user.phone,
+              profileImage: {
+                  url: user.profileImage.url || '',
+                  public_id: user.profileImage.public_id || '',
+              },
+          },
+          token,
+      });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+      console.error(err);
+      res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
+
 
 
 router.post('/login', async (req, res) => {
@@ -70,10 +78,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user.id);
     res.status(201).json({
       user: {
-        id: user._id,
+        id: user.id,
         name: user.name,
         email: user.email,
         phone: user.phone,
@@ -108,7 +116,7 @@ router.get('/verify-token', (req, res) => {
 
       if (!decoded) {
           return res.status(401).json({
-              message: 'Token is not valid',
+              message: 'Invalid Token',
               status: 401,
           });
       }

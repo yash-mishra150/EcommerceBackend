@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
-
+const { v4: uuidv4 } = require('uuid');
 
 const userSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    default: uuidv4, 
+  },
   name: {
     type: String,
     required: true,
@@ -16,7 +20,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   phone: {
-    type: Number,
+    type: String, 
     required: true,
   },
   profileImage: {
@@ -27,11 +31,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  isVerifed: {
+  isVerifed: { 
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
-// Export the User model
+
 module.exports = mongoose.model('User', userSchema);

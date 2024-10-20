@@ -62,7 +62,7 @@ router.post('/send-otp', async (req, res) => {
                 Yash Mishra,
                 Founder
                 GrabEats
-
+                
                 Tushar Bansal,
                 Co-Founder
                 GrabEats

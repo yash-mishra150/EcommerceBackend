@@ -13,7 +13,7 @@ const emailVerify = require('./routes/EmailOTPVerify');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.set('trust proxy', true); // Or use a specific number if you know how many proxies are in front
+// app.set('trust proxy', 1); // Or use a specific number if you know how many proxies are in front
 
 
 app.use(bodyParser.json()); 
