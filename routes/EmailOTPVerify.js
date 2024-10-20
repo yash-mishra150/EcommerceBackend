@@ -11,6 +11,9 @@ router.post('/send-otp', async (req, res) => {
 
     try {
         const user = await User.findOne({ email: email });
+        if(!user){
+            return res.status(400).json({ message: "User not found" });
+        }
         if (user.isVerifed) {
             return res.status(400).json({ message: 'User already verified.' });
         }
@@ -20,7 +23,7 @@ router.post('/send-otp', async (req, res) => {
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
 
-        const otpExpiry = Date.now() + 2 * 60 * 1000;
+        const otpExpiry = Date.now() + 5 * 60 * 1000;
 
 
         await OtpVerification.create({
@@ -44,28 +47,28 @@ router.post('/send-otp', async (req, res) => {
             to: email,
             subject: 'Your OTP for Food Delivery Verification',
             text: `
-                Dear Customer,
+Dear Customer,
         
-                Thank you for choosing GrabEats!
+Thank you for choosing GrabEats!
         
-                To complete your registration and ensure the security of your account, please enter the One-Time Password (OTP) below:
+To complete your registration and ensure the security of your account, please enter the One-Time Password (OTP) below:
         
-                Your OTP: ${otp}
+Your OTP: ${otp}
         
-                This OTP is valid for the next [2 minutes] and can be used only once. If you did not request this OTP, please ignore this email.
+This OTP is valid for the next [2 minutes] and can be used only once. If you did not request this OTP, please ignore this email.
         
-                If you have any questions or need assistance, feel free to reach out to our customer support.
+If you have any questions or need assistance, feel free to reach out to our customer support.
         
-                Thank you for being a valued customer!
+Thank you for being a valued customer!
         
-                Best regards,
-                Yash Mishra,
-                Founder
-                GrabEats
+Best regards,
+Yash Mishra,
+Founder
+GrabEats
                 
-                Tushar Bansal,
-                Co-Founder
-                GrabEats
+Tushar Bansal,
+Co-Founder
+GrabEats
             `
         };
 
