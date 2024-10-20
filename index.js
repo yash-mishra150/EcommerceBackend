@@ -18,7 +18,7 @@ const bus = new EventEmitter();
 // Increase the maximum number of listeners
 bus.setMaxListeners(20);
 
-// app.set('trust proxy', 1); // Or use a specific number if you know how many proxies are in front
+app.set('trust proxy', true); // Or use a specific number if you know how many proxies are in front
 
 
 app.use(bodyParser.json()); 
