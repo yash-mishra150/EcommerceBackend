@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 bus.setMaxListeners(20);
 
-app.set('trust proxy', true);
+// app.set('trust proxy', true);
 
 
 app.use(bodyParser.json()); 

@@ -7,7 +7,7 @@ const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
 const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 const { check, validationResult } = require('express-validator');
 const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
-
+const { verifyToken } = require('../util/jwtToken');
 
 router.use(apiKeyMiddleware);
 router.use(limiter);
@@ -124,5 +124,44 @@ router.post('/login', [
     });
   }
 });
+
+
+router.post('/verify-token', (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({
+      message: 'Token not provided',
+      status: 400,
+    });
+  }
+
+  try {
+
+    const decoded = verifyToken(token);
+
+
+    if (!decoded) {
+      return res.status(401).json({
+        message: 'Invalid token',
+        status: 401,
+      });
+    }
+
+
+    res.status(200).json({
+      message: 'Token is valid',
+      userId: decoded.id, 
+      status: 200,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Server error',
+      status: 500,
+    });
+  }
+});
+
 
 module.exports = router;
