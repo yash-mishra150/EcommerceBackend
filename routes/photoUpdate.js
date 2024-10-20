@@ -7,11 +7,10 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
 const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 
-
 router.use(apiKeyMiddleware);
 router.use(limiter);
 
-
+// Cloudinary storage configuration
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -22,35 +21,45 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-
+// Upload profile image
 router.post('/:id', upload.single('profileImage'), async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const user = await User.findById(userId);
+    // Find user by custom id
+    const user = await User.findOne({ id: userId }); // Using the custom id field
     if (!user) {
       return res.status(404).json({ msg: 'User not found' });
     }
 
+    // Check if the file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ msg: 'No file uploaded' });
+    }
 
-    const result = await cloudinary.uploader.upload(req.file.path);
-
-
+    // Update user profile image
     user.profileImage = {
-      url: result.secure_url,
-      public_id: result.public_id,
+      url: req.file.path, // URL from the multer upload
+      public_id: req.file.filename, // Use filename provided by multer
     };
 
     await user.save();
     res.status(200).json({
-        message: 'Successfully updated',
-        status: 200
-      });
+      message: 'Successfully updated',
+      user: {
+        id: user.id, // Use the custom id field
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        profileImage: user.profileImage,
+      },
+      status: 200,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send({
-      'message': 'Error in Uploading',
-      'status': 500
+      message: 'Error in Uploading',
+      status: 500,
     });
   }
 });
