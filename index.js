@@ -1,33 +1,34 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors'); 
+const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
-
-// Connect to MongoDB Atlas
-
 const auth = require('./routes/auth');
 const UPP = require('./routes/photoUpdate');
 const emailVerify = require('./routes/EmailOTPVerify');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 const EventEmitter = require('events');
 const bus = new EventEmitter();
 
-// Increase the maximum number of listeners
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 bus.setMaxListeners(20);
 
-app.set('trust proxy', true); // Or use a specific number if you know how many proxies are in front
+app.set('trust proxy', true);
 
 
 app.use(bodyParser.json()); 
 
 
 app.use(cors({
-  origin: '*', // Allow all origins
+  origin: '*', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Include credentials if needed
+  credentials: true, 
 }));
 
 

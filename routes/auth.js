@@ -8,6 +8,7 @@ const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 const { check, validationResult } = require('express-validator');
 const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
 
+
 router.use(apiKeyMiddleware);
 router.use(limiter);
 router.use(removeWhitespace);
