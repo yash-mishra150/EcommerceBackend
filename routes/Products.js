@@ -5,11 +5,52 @@ const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
 const { verifyToken } = require('../util/jwtToken');
 const Food = require('../schema/Foods/FoodSchema');
-
+const Shoe = require('../schema/Shoes/ShoeSchema');
 
 router.use(apiKeyMiddleware);
 router.use(limiter);
 router.use(removeWhitespace);
+
+
+router.get('/mob/get', async (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.status(400).json({
+            message: 'Token not provided',
+            status: 400,
+        });
+    }
+
+    try {
+        // Verify the token
+        const decoded = verifyToken(token);
+        if (!decoded) {
+            return res.status(401).json({
+                message: 'Invalid token',
+                status: 401,
+            });
+        }
+
+
+        const products = await Shoe.find().lean();
+
+        const sanitizedProducts = products.map(({ _id, createdAt, updatedAt, __v, ...rest }) => rest);
+
+
+        res.status(200).json({
+            ShoeItems: sanitizedProducts,
+            status: 200,
+        });
+    } catch (error) {
+        console.error('Error fetching shoe items:', error);
+        res.status(500).json({
+            message: 'Server error',
+            status: 500,
+        });
+    }
+});
+
 
 
 router.get('/get', async (req, res) => {
@@ -120,7 +161,7 @@ router.get('/get', async (req, res) => {
 //     }
 
 //     try {
-//         const savedFoodItems = await Food.insertMany(foodItems);
+//         const savedFoodItems = await Shoe.insertMany(foodItems);
 //         res.status(201).json({
 //             message: 'Food items added successfully!',
 //             FoodItems: savedFoodItems,

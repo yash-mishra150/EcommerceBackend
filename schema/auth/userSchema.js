@@ -31,10 +31,23 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  isVerifed: { 
+  isVerified: { 
     type: Boolean,
     default: false,
   },
+  items: [{
+    productId: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Product'
+    },
+    quantity: {
+      type: Number,
+      default: 1
+    },
+    price: {
+      type: Number,
+    },
+  }],
 });
 
 

@@ -23,7 +23,7 @@ bus.setMaxListeners(20);
 // app.set('trust proxy', true);
 
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 
 app.use(cors({

@@ -9,6 +9,8 @@ const { check, validationResult } = require('express-validator');
 const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
 const { verifyToken } = require('../util/jwtToken');
 
+
+
 router.use(apiKeyMiddleware);
 router.use(limiter);
 router.use(removeWhitespace);
