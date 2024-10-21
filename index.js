@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors'); 
+const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const auth = require('./routes/auth');
 const UPP = require('./routes/photoUpdate');
 const emailVerify = require('./routes/EmailOTPVerify');
+const products = require('./routes/Products');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -22,19 +23,20 @@ bus.setMaxListeners(20);
 // app.set('trust proxy', true);
 
 
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
 
 app.use(cors({
-  origin: '*', 
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, 
+  credentials: true,
 }));
 
 
 app.use('/api/auth', auth);
 app.use('/api/upload', UPP);
-app.use('/api/eVerify',emailVerify);
+app.use('/api/eVerify', emailVerify);
+app.use('/api/product', products);
 app.get('/', (req, res) => {
   res.send('Welcome to my Node.js backend!');
 });

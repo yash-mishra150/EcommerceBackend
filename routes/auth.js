@@ -76,7 +76,7 @@ router.post('/register', [
   }
 });
 
-// Login route
+
 router.post('/login', [
   check('email').isEmail().withMessage('Please include a valid email.'),
   check('password').notEmpty().withMessage('Password is required.')
