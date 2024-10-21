@@ -1,15 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
-const limiter = require(`${__dirname}/../middleware/rateLimiter`);
-const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
+
 const { verifyToken } = require('../util/jwtToken');
 const Food = require('../schema/Foods/FoodSchema');
 const Shoe = require('../schema/Shoes/ShoeSchema');
 
-router.use(apiKeyMiddleware);
-router.use(limiter);
-router.use(removeWhitespace);
+
 
 
 router.get('/mob/get', async (req, res) => {

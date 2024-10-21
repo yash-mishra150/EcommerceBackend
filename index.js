@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-
+const apiKeyMiddleware = require(`${__dirname}/./middleware/apikey`);
+const limiter = require(`${__dirname}/./middleware/rateLimiter`);
+const removeWhitespace = require(`${__dirname}/./middleware/removeWhitespaces`);
 const mongoose = require('mongoose');
 const auth = require('./routes/auth');
 const UPP = require('./routes/photoUpdate');
@@ -19,11 +21,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 bus.setMaxListeners(20);
-
+app.use(apiKeyMiddleware);
+app.use(limiter);
+app.use(removeWhitespace);
 // app.set('trust proxy', true);
 
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 
 app.use(cors({

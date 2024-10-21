@@ -3,17 +3,13 @@ const router = express.Router();
 const User = require('../schema/auth/userSchema');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../util/jwtToken');
-const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
-const limiter = require(`${__dirname}/../middleware/rateLimiter`);
+
 const { check, validationResult } = require('express-validator');
-const removeWhitespace = require(`${__dirname}/../middleware/removeWhitespaces`);
+
 const { verifyToken } = require('../util/jwtToken');
 
 
 
-router.use(apiKeyMiddleware);
-router.use(limiter);
-router.use(removeWhitespace);
 
 // Registration route with validations
 router.post('/register', [
@@ -26,7 +22,7 @@ router.post('/register', [
     .isLength({ min: 10, max: 10 }).withMessage('Phone number must be 10 digits long.'),
   check('password')
     .trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.')
-  
+
 ], async (req, res) => {
   console.log('Received request body:', req.body);
   const errors = validationResult(req);
@@ -153,7 +149,7 @@ router.post('/verify-token', (req, res) => {
 
     res.status(200).json({
       message: 'Token is valid',
-      userId: decoded.id, 
+      userId: decoded.id,
       status: 200,
     });
   } catch (error) {

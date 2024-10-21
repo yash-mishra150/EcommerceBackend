@@ -4,11 +4,7 @@ const User = require('../schema/auth/userSchema');
 const cloudinary = require('../config/cloudinary');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const apiKeyMiddleware = require(`${__dirname}/../middleware/apikey`);
-const limiter = require(`${__dirname}/../middleware/rateLimiter`);
 
-router.use(apiKeyMiddleware);
-router.use(limiter);
 
 // Cloudinary storage configuration
 const storage = new CloudinaryStorage({
