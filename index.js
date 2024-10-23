@@ -31,11 +31,14 @@ app.use(removeWhitespace);
 app.use(bodyParser.json());
 
 
-app.use(cors({
+const corsOptions = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-}));
+  credentials: true, 
+  optionsSuccessStatus: 204 
+};
+app.use(cors(corsOptions));
+
 
 
 app.use('/api/auth', auth);

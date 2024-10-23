@@ -39,6 +39,9 @@ const userSchema = new mongoose.Schema({
     productId: {
       type: String,
     },
+    commonId: {
+      type: String
+    },
     quantity: {
       type: Number,
       default: 1
