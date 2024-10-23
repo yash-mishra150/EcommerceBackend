@@ -34,10 +34,10 @@ app.use(bodyParser.json());
 const corsOptions = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, 
-  optionsSuccessStatus: 204 
+  credentials: true,
+  optionsSuccessStatus: 204
 };
-app.use(cors(corsOptions));
+app.use('*', cors(corsOptions));
 
 
 
