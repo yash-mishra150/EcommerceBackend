@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const userSchema = new mongoose.Schema({
   id: {
     type: String,
-    default: uuidv4, 
+    default: uuidv4,
   },
   name: {
     type: String,
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   phone: {
-    type: String, 
+    type: String,
     required: true,
   },
   profileImage: {
@@ -31,21 +31,17 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  isVerified: { 
+  isVerified: {
     type: Boolean,
     default: false,
   },
   items: [{
     productId: {
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'Product'
+      type: String,
     },
     quantity: {
       type: Number,
       default: 1
-    },
-    price: {
-      type: Number,
     },
   }],
 });

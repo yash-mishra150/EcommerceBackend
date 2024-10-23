@@ -10,6 +10,7 @@ const auth = require('./routes/auth');
 const UPP = require('./routes/photoUpdate');
 const emailVerify = require('./routes/EmailOTPVerify');
 const products = require('./routes/Products');
+const cart = require('./routes/Cart');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -41,6 +42,7 @@ app.use('/api/auth', auth);
 app.use('/api/upload', UPP);
 app.use('/api/eVerify', emailVerify);
 app.use('/api/product', products);
+app.use('/api/cart', cart);
 app.get('/', (req, res) => {
   res.send('Welcome to my Node.js backend!');
 });

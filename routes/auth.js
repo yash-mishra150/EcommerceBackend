@@ -11,7 +11,6 @@ const { verifyToken } = require('../util/jwtToken');
 
 
 
-// Registration route with validations
 router.post('/register', [
   check('name').trim().notEmpty().withMessage('Name is required.'),
   check('email').trim().isEmail().withMessage('Please include a valid email.'),
@@ -91,7 +90,7 @@ router.post('/login', [
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
-    if (!user.isVerifed) {
+    if (!user.isVerified) {
       return res.status(401).json({ msg: 'Please Verify First' });
     }
 
