@@ -1,5 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+app.use('*', cors(corsOptions));
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const apiKeyMiddleware = require(`${__dirname}/./middleware/apikey`);
@@ -13,6 +21,9 @@ const products = require('./routes/Products');
 const cart = require('./routes/Cart');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+
 
 const EventEmitter = require('events');
 const bus = new EventEmitter();
@@ -31,13 +42,6 @@ app.use(removeWhitespace);
 app.use(bodyParser.json());
 
 
-const corsOptions = {
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204
-};
-app.use('*', cors(corsOptions));
 
 
 
