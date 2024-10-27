@@ -21,7 +21,6 @@ router.post('/register', [
     .isLength({ min: 10, max: 10 }).withMessage('Phone number must be 10 digits long.'),
   check('password')
     .trim().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.')
-
 ], async (req, res) => {
   console.log('Received request body:', req.body);
   const errors = validationResult(req);
@@ -32,37 +31,49 @@ router.post('/register', [
   const { name, email, password, phone } = req.body;
 
   try {
-    let existingUser = await User.findOne({ email });
-    let existingPhoneUser = await User.findOne({ phone });
-    if (existingUser || existingPhoneUser) {
-      return res.status(400).json({ msg: 'User already exists' });
+    if (!name || !email || !password || !phone) {
+      return res.status(400).json({ msg: 'Please provide all required details.' });
+    }
+
+    const existingUser = await User.findOne({ name, phone });
+    const existingEmail = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ msg: 'User already exists.' });
+    }
+    if (!existingEmail) {
+      return res.status(404).json({ msg: 'Please verify first.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-      profileImage: {
-        url: '',
-        public_id: '',
-      },
-    });
 
-    await user.save();
-    const token = generateToken(user.id);
-
-    res.status(201).json({
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      {
+        name,
+        password: hashedPassword,
+        phone,
         profileImage: {
-          url: user.profileImage.url || '',
-          public_id: user.profileImage.public_id || '',
+          url: '',
+          public_id: '',
+        },
+      },
+      { new: true }
+    );
+
+
+    const token = generateToken(updatedUser.id);
+
+
+    res.status(200).json({
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        profileImage: {
+          url: updatedUser.profileImage.url || '',
+          public_id: updatedUser.profileImage.public_id || '',
         },
       },
       token,
@@ -72,7 +83,6 @@ router.post('/register', [
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
-
 
 router.post('/login', [
   check('email').isEmail().withMessage('Please include a valid email.'),
@@ -85,6 +95,7 @@ router.post('/login', [
   }
 
   try {
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials' });
