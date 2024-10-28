@@ -92,4 +92,47 @@ router.post('/add', async (req, res) => {
     }
 });
 
+
+router.delete('/:userId/product/:productId', async (req, res) => {
+    const { userId, productId } = req.params;
+    const token = req.query.token;
+
+    if (!token) {
+        return res.status(400).json({
+            message: 'Token not provided',
+            status: 400,
+        });
+    }
+
+    try {
+        const decoded = verifyToken(token);
+        if (!decoded) {
+            return res.status(401).json({
+                message: 'Invalid token',
+                status: 401,
+            });
+        }
+        const user = await User.findOne({ id: userId, 'items.productId': productId });
+        if (!user) {
+            return res.status(404).json({ message: 'User or item not found' });
+        }
+
+        const result = await User.findOneAndUpdate(
+            { id: userId },
+            { $pull: { items: { productId: productId } } },
+            { new: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({ message: 'User or item not found' });
+        }
+
+        res.status(200).json({
+            message: 'Item deleted successfully',
+            status: 200
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting item', error });
+    }
+});
 module.exports = router;
