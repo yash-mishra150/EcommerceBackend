@@ -8,7 +8,7 @@ const Shoe = require('../schema/Shoes/ShoeSchema');
 
 
 
-router.get('/mob/get', async (req, res) => {
+router.post('/mob/get', async (req, res) => {
     const { token } = req.body;
 
     if (!token) {
@@ -49,7 +49,7 @@ router.get('/mob/get', async (req, res) => {
 
 
 
-router.get('/get', async (req, res) => {
+router.post('/get', async (req, res) => {
     const { token } = req.body;
 
     if (!token) {
