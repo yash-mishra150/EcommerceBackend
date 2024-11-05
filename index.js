@@ -36,7 +36,7 @@ bus.setMaxListeners(20);
 app.use(apiKeyMiddleware);
 app.use(limiter);
 app.use(removeWhitespace);
-// app.set('trust proxy', true);
+app.set('trust proxy', true);
 
 
 app.use(bodyParser.json());
