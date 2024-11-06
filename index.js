@@ -13,6 +13,8 @@ const cart = require('./routes/Cart');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors');
+app.set('trust proxy', 1);
+
 
 const corsOptions = {
   origin: '*',
@@ -36,7 +38,7 @@ bus.setMaxListeners(20);
 app.use(apiKeyMiddleware);
 app.use(limiter);
 app.use(removeWhitespace);
-app.set('trust proxy', true);
+
 
 
 app.use(bodyParser.json());
