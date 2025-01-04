@@ -68,7 +68,7 @@ Body:
 
 #### Login a User
 
-```
+```http
 POST /api/auth/login
 ```
 
@@ -83,7 +83,7 @@ Body:
 
 #### Verify Token
 
-```
+```http
 POST /api/auth/verify-token
 ```
 
@@ -111,7 +111,7 @@ Body:
 
 #### Verify OTP
 
-```
+```http
 POST /api/eVerify/verify-otp
 ```
 
@@ -126,7 +126,7 @@ Body:
 
 #### Upload File
 
-```
+```http
 POST /api/upload/:id
 ```
 
@@ -140,7 +140,7 @@ Path Parameters:
 
 #### Get Products (Mobile)
 
-```
+```http
 GET /api/product/mob/get
 ```
 
@@ -155,7 +155,7 @@ Headers:
 
 #### Add Product to Cart
 
-```
+```http
 POST /api/cart/add
 ```
 
@@ -177,7 +177,7 @@ Body:
 
 #### Get Cart Details
 
-```
+```http
 GET /api/cart/details
 ```
 
@@ -204,6 +204,7 @@ Headers:
 ```
 
 Configure environment variables:
+
 ```
     Create a `.env` file in the root directory and add the following:
      PORT=5000
