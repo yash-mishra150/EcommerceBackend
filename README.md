@@ -97,7 +97,7 @@ Body:
 
 #### Send OTP
 
-```
+```http
 POST /api/eVerify/send-otp
 ```
 
