@@ -13,7 +13,7 @@ const emailVerify = require("./routes/EmailOTPVerify");
 const products = require("./routes/Products");
 const cart = require("./routes/Cart");
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const cors = require("cors");
 
 const corsOptions = {
