@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../schema/auth/userSchema');
 const { verifyToken } = require('../util/jwtToken');
 const Product = require('../schema/Foods/FoodSchema');
+const logger = require('../middleware/logging/logger');
 
 
 router.get('/get', async (req, res) => {
@@ -76,7 +77,7 @@ router.get('/get', async (req, res) => {
             status: 200,
         });
     } catch (error) {
-        console.error('Error fetching products:', error);
+        logger.error('Error fetching products:', error);
         return res.status(500).json({
             message: 'An error occurred while fetching products',
             error: error.message,
@@ -163,7 +164,7 @@ router.post('/add', async (req, res) => {
         }
 
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).json({
             message: 'Server error',
             status: 500,

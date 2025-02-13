@@ -5,6 +5,7 @@ const { verifyToken } = require('../util/jwtToken');
 const Food = require('../schema/Foods/FoodSchema');
 const Shoe = require('../schema/Shoes/ShoeSchema');
 const User = require('../schema/auth/userSchema');
+const logger = require('../middleware/logging/logger');
 
 // router.post('/fav/toggle', async (req, res) => {
 //     const { token, user_id, product_id, isHearted } = req.body;
@@ -85,7 +86,7 @@ router.post('/mob/get', async (req, res) => {
             status: 200,
         });
     } catch (error) {
-        console.error('Error fetching shoe items:', error);
+        logger.error('Error fetching shoe items:', error);
         res.status(500).json({
             message: 'Server error',
             status: 500,
@@ -136,7 +137,7 @@ router.post('/get', async (req, res) => {
             status: 200,
         });
     } catch (error) {
-        console.error('Error fetching food items:', error);
+        logger.error('Error fetching food items:', error);
         res.status(500).json({
             message: 'Server error',
             status: 500,

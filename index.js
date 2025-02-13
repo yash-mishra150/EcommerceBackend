@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-const apiKeyMiddleware = require(`${__dirname}/./middleware/apikey`);
-const limiter = require(`${__dirname}/./middleware/rateLimiter`);
-const removeWhitespace = require(`${__dirname}/./middleware/removeWhitespaces`);
+const apiKeyMiddleware = require(`${__dirname}/./middleware/Security/API_Security/apikey`);
+const limiter = require(`${__dirname}/./middleware/Security/RateLimiting/rateLimiter`);
+const removeWhitespace = require(`${__dirname}/./middleware/Validations/removeWhitespaces`);
+const { restrictIpAddress }  = require(`${__dirname}/./middleware/Security/IPRestriction/security`);
+const sanitizeInput = require("${__dirname}/./middleware/Validations/Sanitization");
 const mongoose = require("mongoose");
 const auth = require("./routes/auth");
 const UPP = require("./routes/photoUpdate");
@@ -13,6 +15,7 @@ const cart = require("./routes/Cart");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require("cors");
+
 const corsOptions = {
   origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -22,6 +25,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.set("trust proxy", 1);
 const EventEmitter = require("events");
+const logger = require("./middleware/logging/logger");
 const bus = new EventEmitter();
 bus.setMaxListeners(20);
 
@@ -31,6 +35,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(apiKeyMiddleware);
 // app.use(limiter);
 app.use(removeWhitespace);
+app.use(restrictIpAddress("*"));
+app.use(sanitizeInput)
 
 // Route setup
 app.use("/api/auth", auth);
@@ -46,12 +52,12 @@ app.get("/", (req, res) => {
 
 // Server setup
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on port ${PORT}`);
 });
 
 // MongoDB connection
 const mongoURI = process.env.MONGODB_URI;
 mongoose
   .connect(mongoURI)
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.log("MongoDB connection error: ", err));
+  .then(() => logger.info("MongoDB connected successfully"))
+  .catch((err) => logger.error("MongoDB connection error: ", err));

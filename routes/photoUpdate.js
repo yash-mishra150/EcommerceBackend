@@ -4,6 +4,7 @@ const User = require('../schema/auth/userSchema');
 const cloudinary = require('../config/cloudinary');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const logger = require('../middleware/logging/logger');
 
 
 // Cloudinary storage configuration
@@ -52,7 +53,7 @@ router.post('/:id', upload.single('profileImage'), async (req, res) => {
       status: 200,
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.status(500).send({
       message: 'Error in Uploading',
       status: 500,

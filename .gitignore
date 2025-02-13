@@ -37,3 +37,5 @@ Dockerfile
 # npm package files
 package-lock.json
 yarn.lock
+
+logs/
